@@ -1,37 +1,26 @@
 import * as THREE from 'three';
-import { noise, getRoadTurn } from './terrain.js';
+
+export const noise = (x, z) => {
+    return Math.sin(x * 0.05) * Math.cos(z * 0.05) * 5 + Math.sin(z * 0.01) * 8;
+};
+
+export function getRoadPoint(z) {
+    const x = Math.sin(z * 0.015) * 20 + Math.cos(z * 0.008) * 10;
+    return new THREE.Vector3(x, noise(x, z), z);
+}
 
 export class RoadChunk {
     constructor(zOffset, size) {
-        this.mesh = new THREE.Group();
-        const segments = 10;
-        const step = size / segments;
-
-        for (let i = 0; i < segments; i++) {
-            const currentZ = -i * step;
-            const absoluteZ = zOffset + currentZ;
-            const roadX = getRoadTurn(absoluteZ);
-
-            const geo = new THREE.PlaneGeometry(12, step + 0.5);
-            geo.rotateX(-Math.PI / 2);
-            const mat = new THREE.MeshPhongMaterial({ color: 0x222222 });
-            const segment = new THREE.Mesh(geo, mat);
-            
-            segment.position.set(roadX, noise(roadX, absoluteZ) + 0.05, currentZ);
-            // Road ko modna
-            segment.rotation.y = (getRoadTurn(absoluteZ - 1) - roadX) * 0.5;
-            this.mesh.add(segment);
-
-            // Side Barriers
-            const barrierGeo = new THREE.BoxGeometry(0.4, 0.8, step);
-            const barrierMat = new THREE.MeshPhongMaterial({color: 0xcccccc});
-            const leftB = new THREE.Mesh(barrierGeo, barrierMat);
-            leftB.position.set(-6, 0.4, 0);
-            segment.add(leftB);
-            const rightB = new THREE.Mesh(barrierGeo, barrierMat);
-            rightB.position.set(6, 0.4, 0);
-            segment.add(rightB);
+        this.group = new THREE.Group();
+        const points = [];
+        for (let i = 0; i <= 10; i++) {
+            points.push(getRoadPoint(zOffset - (i / 10) * size));
         }
-        this.mesh.position.z = zOffset;
+        const curve = new THREE.CatmullRomCurve3(points);
+        const geo = new THREE.TubeGeometry(curve, 20, 7, 8, false);
+        const mat = new THREE.MeshPhongMaterial({ color: 0x222222 });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.scale.set(1, 0.04, 1);
+        this.group.add(mesh);
     }
 }
