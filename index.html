@@ -3,27 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Slow Drive</title>
+    <title>Slow Drive Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#87ceeb">
     <style>
-        body { margin: 0; overflow: hidden; background: #87ceeb; font-family: sans-serif; }
+        body { margin: 0; overflow: hidden; background: #b4d0e7; font-family: sans-serif; user-select: none; }
         canvas { display: block; touch-action: none; }
-        #ui { position: absolute; bottom: 20px; width: 100%; text-align: center; color: white; pointer-events: none; opacity: 0.6; }
+        
+        /* UI Styles */
+        #controls { position: absolute; bottom: 30px; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; box-sizing: border-box; pointer-events: none; }
+        .btn { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border: 3px solid white; border-radius: 50%; pointer-events: auto; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; -webkit-tap-highlight-color: transparent; }
+        .btn:active { background: rgba(255,255,255,0.5); }
+        
+        #steering-container { width: 150px; height: 150px; border: 5px solid rgba(255,255,255,0.5); border-radius: 50%; display: flex; justify-content: center; align-items: center; pointer-events: auto; position: relative; }
+        #wheel { width: 130px; height: 130px; background: url('https://cdn-icons-png.flaticon.com/512/1175/1175402.png'); background-size: cover; transition: transform 0.1s; }
+        
+        #pedals { display: flex; gap: 20px; }
+        #gas { background: rgba(0, 255, 0, 0.2); width: 90px; height: 120px; border-radius: 10px; }
+        #brake { background: rgba(255, 0, 0, 0.2); width: 80px; height: 100px; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div id="ui">Hold Left or Right to steer</div>
+    <div id="controls">
+        <div id="steering-container">
+            <div id="wheel"></div>
+        </div>
+        <div id="pedals">
+            <div id="brake" class="btn">BRK</div>
+            <div id="gas" class="btn">GAS</div>
+        </div>
+    </div>
     
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
     <script type="importmap">
         { "imports": { "three": "https://unpkg.com/three@0.158.0/build/three.module.js" } }
     </script>
     <script type="module" src="main.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-    </script>
 </body>
 </html>
