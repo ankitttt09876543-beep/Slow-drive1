@@ -1,0 +1,11 @@
+{
+  "name": "Slow Drive",
+  "short_name": "SlowDrive",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#87ceeb",
+  "theme_color": "#87ceeb",
+  "icons": [
+    { "src": "https://cdn-icons-png.flaticon.com/512/3721/3721619.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
